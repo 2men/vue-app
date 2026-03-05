@@ -1,6 +1,6 @@
 <template>
   <div class="product-list">
-    <ProductItem  v-for="product in products" :key="product.id" :product="product" @add-basket="$emit('addBasket', product)" />
+    <ProductItem  v-for="product in products" :key="product.id" :product="product" />
   </div>
 </template>
 

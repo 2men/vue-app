@@ -10,17 +10,24 @@
         </div>
       </div>
       <div class="product-item__buttons">
-        <my-button @click="$emit('addBasket', product)">Добавить в корзину</my-button>
+        <my-button @click="add(product)">Добавить в корзину</my-button>
       </div>
     </div>
 </template>
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   props: {
     product: {
       type: Object,
       required: true
     }
+  },
+  methods: {
+    ...mapMutations({
+      add: 'addItemToBasket'
+    })
   }
 }
 </script>
