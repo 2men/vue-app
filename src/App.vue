@@ -17,7 +17,8 @@
                 <input v-model="searchQuery" class="input" type="text" placeholder="Поиск...">
               </form>
             </div>
-            <ProductList :products="filtedProducts(searchQuery)" />
+            <ProductList v-if="!isEmpty" :products="filtedProducts(searchQuery)" />
+            <p v-else class="text-empty">Ничего не найдено</p>
           </div>
           <div class="sidebar" v-show="basket.length">
             <MyBasket class="sticky" @order="order" />
@@ -50,7 +51,10 @@ export default {
   },
   computed: {
     ...mapState(['products', 'basket']),
-    ...mapGetters(['filtedProducts'])
+    ...mapGetters(['filtedProducts']),
+    isEmpty() {
+      return !this.filtedProducts(this.searchQuery).length
+    }
   },
   methods: {
     ...mapMutations(['cleanBasket']),
@@ -146,5 +150,9 @@ export default {
 .sticky {
   position: sticky;
   top: 30px;
+}
+
+.text-empty {
+  font-size: 1.5rem;
 }
 </style>
