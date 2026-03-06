@@ -9,13 +9,18 @@
           <p>Цена: {{ product.price }} р.</p>
         </div>
       </div>
-      <div class="product-item__buttons">
-        <my-button @click="add(product)">Добавить в корзину</my-button>
+      <div v-if="!inBasket" class="product-item__buttons">
+        <my-button @click="onClickAddItem">Добавить в корзину</my-button>
+      </div>
+      <div v-else class="product-item__counter">
+        <my-button class="btn-square" @click="counter > 1 && (counter-- && onClickButtonCounter())">-</my-button>
+        <my-input type="number" :model-value="counter" @update:model-value="newValue => counter = newValue" />
+        <my-button class="btn-square" @click="counter++ && onClickButtonCounter()">+</my-button>
       </div>
     </div>
 </template>
 <script>
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   props: {
@@ -24,14 +29,48 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      counter: 1,
+      // inBasket: false
+    }
+  },
+  watch: {
+    isEmptyBasket(value) {
+      if (value === 0) {
+        this.counter = 1;
+      }
+    },
+    inBasket(value) {
+      if (!value) {
+        this.counter = 1;
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['inBasketByProduct', 'isEmptyBasket']),
+    inBasket() {
+      return this.inBasketByProduct(this.product);
+    }
+  },
   methods: {
     ...mapMutations({
-      add: 'addItemToBasket'
-    })
+      addItem: 'addItemToBasket',
+      setCounter: 'setCounterBasketItem',
+    }),
+    onClickButtonCounter() {
+      this.setCounter({
+        product: this.product,
+        counter: this.counter
+      })
+    },
+    onClickAddItem() {
+      this.addItem(this.product);
+    }
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .product-item {
   padding: 15px; 
   border: 1px solid teal;
@@ -43,6 +82,26 @@ export default {
 
   &__content {
     margin-bottom: 15px;
+  }
+
+  &__buttons {
+    .btn {
+      width: 100%;
+    }
+  }
+
+  &__counter {
+    display: flex;
+
+    .btn {
+      flex-shrink: 0;
+    }
+
+    .input {
+      text-align: center;
+      border-right: none;
+      border-left: none;
+    }
   }
 }
 </style>

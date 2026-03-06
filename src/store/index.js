@@ -59,23 +59,30 @@ const store = createStore({
   getters: {
     filtedProducts(state) {
       return (searchQuery) => state.products.filter(product => product.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1);
-    }
+    },
+    inBasketByProduct(state) {
+      return (product) => state.basket.find(item => item.id === product.id)
+    },
+    isEmptyBasket(state) {
+      return state.basket.length
+    },
   },
   mutations: {
     addItemToBasket(state, product) {
-      const findedItem = state.basket.find(item => item.id === product.id);
-      if (findedItem) {
-        findedItem.counter += 1;
-      } else {
-        state.basket.push({ ...product, counter: 1 })
-      }
+      state.basket.push({ ...product, counter: 1 })
     },
     removeItemFromBasket(state, product) {
-      // const productIndex = state.basket.findIndex(item => item.id === product.id);
-      // state.basket.splice(productIndex, 1);
       state.basket = state.basket.filter(item => item.id !== product.id)
     },
     cleanBasket(state) {
+      state.basket = [];
+    },
+    setCounterBasketItem(state, { product, counter }) {
+      const findedItem = state.basket.find(item => item.id === product.id);
+      findedItem.counter = counter;
+    },
+    toOrdered(state, totalPrice) {
+      alert("Заказ оформлен! Сумма платежа: " + totalPrice + " рублей.");
       state.basket = [];
     }
   },

@@ -10,14 +10,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .btn {
-  padding: 10px 15px;
+  height: 40px;
+  padding: 0 15px;
   background: none;
   border: 1px solid teal;
+  outline: none;
   cursor: pointer;
 
   &-square {
+    width: 40px;
     padding: 0;
-    border: none;
   }
 }
 </style>

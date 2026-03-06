@@ -14,7 +14,7 @@
             </div>
             <div class="content__form">
               <form class="form">
-                <input v-model="searchQuery" class="input" type="text" placeholder="Поиск...">
+                 <my-input :model-value="searchQuery" placeholder="Поиск..." @update:model-value="newValue => searchQuery = newValue" />
               </form>
             </div>
             <ProductList v-if="!isEmpty" :products="filtedProducts(searchQuery)" />
@@ -57,10 +57,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['cleanBasket']),
+    ...mapMutations(['cleanBasket', 'addItemToBasket', 'setCounterBasketItem', 'toOrdered']),
     order(totalPrice) {
-      alert("Заказ оформлен! Сумма платежа: " + totalPrice + " рублей.");
-      this.cleanBasket();
+      this.toOrdered(totalPrice);
     },
   }
 }
@@ -128,9 +127,7 @@ export default {
 
     .form {
       .input {
-        width: 100%;
         padding: 10px 20px;
-        border: 1px solid teal;
       }
     }
   }
