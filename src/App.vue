@@ -1,66 +1,36 @@
 <template>
   <div class="wrapper">
-    <header class="header">
-      <div class="container">
-        Header
-      </div>
-    </header>
+    <MyHeader />
+
     <main class="main">
       <div class="container">
         <div class="main__inner">
-          <div class="content">
-            <div class="content__title">
-              <h1>Каталог</h1>
-            </div>
-            <div class="content__form">
-              <form class="form">
-                 <my-input :model-value="searchQuery" placeholder="Поиск..." @update:model-value="newValue => searchQuery = newValue" />
-              </form>
-            </div>
-            <ProductList v-if="!isEmpty" :products="filtedProducts(searchQuery)" />
-            <p v-else class="text-empty">Ничего не найдено</p>
-          </div>
-          <div class="sidebar" v-show="basket.length">
-            <MyBasket class="sticky" @order="order" />
-          </div>
+          <MyContent />
+          <MySidebar v-show="isEmptyBasket" />
         </div>
       </div>
     </main>
-    <footer class="footer">
-      <div class="container">
-        &#169; Улан-Удэ, {{ new Date().getFullYear() }}
-      </div>
-    </footer>
+
+    <MyFooter />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState } from 'vuex';
-import ProductList from '@/components/ProductList.vue';
-import MyBasket from '@/components/MyBasket.vue';
+import { mapGetters } from 'vuex';
+import MyHeader from '@/components/MyHeader.vue';
+import MyFooter from '@/components/MyFooter.vue';
+import MyContent from '@/components/MyContent.vue';
+import MySidebar from '@/components/MySidebar.vue';
 
 export default {
   components: {
-    ProductList,
-    MyBasket,
-  },
-  data() {
-    return {
-      searchQuery: ''
-    }
+    MyHeader,
+    MyFooter,
+    MyContent,
+    MySidebar,
   },
   computed: {
-    ...mapState(['products', 'basket']),
-    ...mapGetters(['filtedProducts']),
-    isEmpty() {
-      return !this.filtedProducts(this.searchQuery).length
-    }
-  },
-  methods: {
-    ...mapMutations(['cleanBasket', 'addItemToBasket', 'setCounterBasketItem', 'toOrdered']),
-    order(totalPrice) {
-      this.toOrdered(totalPrice);
-    },
+    ...mapGetters(['isEmptyBasket'])
   }
 }
 </script>
@@ -83,18 +53,6 @@ export default {
   }
 }
 
-.header,
-.footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 60px;
-  background-color: teal;
-  color: white;
-}
-
-.header {}
-
 .main {
   flex-grow: 1;
 
@@ -106,50 +64,5 @@ export default {
       display: block;
     }
   }
-}
-
-.content,
-.sidebar {
-  padding: 30px 15px;
-
-  @media (max-width: 1024px) {
-    padding: 30px 0;
-  }
-}
-
-.content {
-  &__title {
-    margin-bottom: 30px;
-  }
-
-  &__form {
-    margin-bottom: 30px;
-
-    .form {
-      .input {
-        padding: 10px 20px;
-      }
-    }
-  }
-}
-
-.sidebar {
-  width: 320px;
-
-  @media (max-width: 1024px) {
-    position: sticky;
-    bottom: 0;
-    width: 100%;
-    background-color: white;
-  }
-}
-
-.sticky {
-  position: sticky;
-  top: 30px;
-}
-
-.text-empty {
-  font-size: 1.5rem;
 }
 </style>
