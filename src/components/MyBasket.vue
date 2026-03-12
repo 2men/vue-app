@@ -10,14 +10,18 @@
       </div>
     </div>
     <div class="basket__buttons">
-      <my-button @click="$emit('order', totalPrice)">
+      <my-button @click="order">
         Оформить заказ
+      </my-button>
+      <my-button @click="reset">
+        Очистить
       </my-button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import BasketList from './BasketList.vue';
 
 export default {
@@ -27,6 +31,15 @@ export default {
   computed: {
     totalPrice() {
       return this.$store.state.basket.reduce((value, current) => value += current.price * current.counter, 0);
+    }
+  },
+  methods: {
+    ...mapMutations(['toOrdered', 'cleanBasket']),
+    order() {
+      this.toOrdered(this.totalPrice);
+    },
+    reset() {
+      this.cleanBasket();
     }
   }
 }
@@ -63,6 +76,12 @@ export default {
     align-items: center;
     justify-content: space-between;
     font-size: 1.5rem;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--margin);
   }
 }
 </style>

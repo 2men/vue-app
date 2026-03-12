@@ -5,8 +5,12 @@
     <main class="main">
       <div class="container">
         <div class="main__inner">
-          <MyContent />
-          <MySidebar v-show="isEmptyBasket" />
+          <Transition name="content">
+            <MyContent />
+          </Transition>
+          <Transition name="sidebar">
+            <MySidebar v-show="isEmptyBasket" />
+          </Transition>
         </div>
       </div>
     </main>
@@ -41,6 +45,7 @@ export default {
   flex-direction: column;
   min-height: 100vh;
   font-family: sans-serif;
+  overflow: clip;
 }
 
 .container {
@@ -62,6 +67,27 @@ export default {
 
     @media (max-width: 1024px) {
       display: block;
+    }
+  }
+}
+
+@media (min-width: 1025px) {
+  .sidebar-enter-active {
+    animation: sidebar .5s;
+  }
+
+  .sidebar-leave-active {
+    animation: sidebar .5s reverse;
+  }
+
+  @keyframes sidebar {
+    0% {
+      width: 0;
+      opacity: 0;
+    }
+    100% {
+      width: 320px;
+      opacity: 1;
     }
   }
 }
