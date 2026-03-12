@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <MyBasket class="sticky sidebar__basket" @order="order" />
+    <MyBasket class="sticky sidebar__basket" />
   </div>
 </template>
 <script>
@@ -14,7 +14,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sidebar {
-  padding: var(--padding-lg) var(--padding);
+  padding: 0 var(--padding);
 
   @media (max-width: 1024px) {
     position: sticky;

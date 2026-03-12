@@ -4,14 +4,7 @@
 
     <main class="main">
       <div class="container">
-        <div class="main__inner">
-          <Transition name="content">
-            <MyContent />
-          </Transition>
-          <Transition name="sidebar">
-            <MySidebar v-show="isEmptyBasket" />
-          </Transition>
-        </div>
+        <RouterView />
       </div>
     </main>
 
@@ -20,21 +13,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import MyHeader from '@/components/MyHeader.vue';
 import MyFooter from '@/components/MyFooter.vue';
-import MyContent from '@/components/MyContent.vue';
-import MySidebar from '@/components/MySidebar.vue';
 
 export default {
   components: {
     MyHeader,
     MyFooter,
-    MyContent,
-    MySidebar,
-  },
-  computed: {
-    ...mapGetters(['isEmptyBasket'])
   }
 }
 </script>
@@ -60,15 +45,8 @@ export default {
 
 .main {
   flex-grow: 1;
-
-  &__inner {
-    display: grid;
-    grid-template-columns: 1fr auto;
-
-    @media (max-width: 1024px) {
-      display: block;
-    }
-  }
+  padding-top: var(--padding-lg);
+  padding-bottom: var(--padding-lg);
 }
 
 @media (min-width: 1025px) {
